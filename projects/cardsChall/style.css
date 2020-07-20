@@ -8,8 +8,29 @@ body, html {
   height: 70%;
 }
 
+/* #yourElement1 {
+    background: url("https://images.unsplash.com/photo-1516590914727-51e55df118d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 200px;
+}
+#yourElement2 {
+    background: url("https://images.pexels.com/photos/2587639/pexels-photo-2587639.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 200px;
+} */
+
 /* .card-img-top {
-  height: 150px;
+    flex-grow: 1;
+    object-fit:contain;
+}
+.card-body{
+    flex-grow:0;
 } */
 
 .title {
