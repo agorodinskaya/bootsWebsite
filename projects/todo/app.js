@@ -1,4 +1,4 @@
-console.clear()
+window.onload = function () {
 
 // const createButton = document.getElementById('addButton');
 
@@ -10,6 +10,9 @@ console.clear()
 const taskContainer = document.querySelector('#tasks');
 const modal = document.querySelector('#newTaskInput');
 const taskModalSaveBtn = document.querySelector('#task-modal-save');
+
+// //form fields:
+
 
 // priorities creating an array of options: 
 const high = document.querySelector('#highPriority');
@@ -34,10 +37,13 @@ taskModalSaveBtn.addEventListener('click', saveBtn)
 
 //functions:
 function saveBtn(){
-    const name = document.querySelector('#taskName').value;
-    const description = document.querySelector('#taskDescription').value;
-    const dueDate = document.querySelector('#taskDate').value;
-    const assignee = document.querySelector('#taskAssignee').value;
+    let name = document.querySelector('#taskName');
+    console.log(name)
+    
+    let description = document.querySelector('#taskDescription');
+    
+    let dueDate = document.querySelector('#taskDate');
+    let assignee = document.querySelector('#taskAssignee');
     // console.log({ name, description, dueDate, assignee});
     // console.log(priorities)
     let checkedPriority;
@@ -55,11 +61,12 @@ function saveBtn(){
             console.log(typeof checkedProgress, checkedProgress);
         }
     }
-    console.log({ name, dueDate, assignee, description, checkedPriority, checkedProgress });
-    addTask(name, dueDate, assignee, description, checkedPriority, checkedProgress );
-    
+    // console.log({ name, dueDate, assignee, description, checkedPriority, checkedProgress });
+    addTask(name.value, dueDate.value, assignee.value, description.value, checkedPriority, checkedProgress );
     
 }
+
+
 
 function addTask(name, dueDate, assignee, description, checkedPriority, checkedProgress){
     const html = `<div class="row task" id="task1">
@@ -93,10 +100,11 @@ function addTask(name, dueDate, assignee, description, checkedPriority, checkedP
                                                 <i class="fas fa-edit"></i></a>
                                         </li>
                                         <li class="col">
-                                            <svg width="15" height="15">
+                                            <button class="d-inline btn btn-link data-toggle="modal"
+                                                data-target="#"><svg width="15" height="15">
                                                 <circle cx="7" cy="7" r="7" fill=${arrayColorSVG[checkedPriority - 1]} />
                                             </svg>
-                                            
+                                            </button>
                                         </li>
                                         <li class="col">
                                             <button class="btn btn-link ${checkedProgress}" data-toggle="modal"
@@ -111,6 +119,46 @@ function addTask(name, dueDate, assignee, description, checkedPriority, checkedP
                             </div>
 `
 const taskElement = document.createRange().createContextualFragment(html);
+    
 taskContainer.append(taskElement)
+    
 }
+}
+//// alerts :
+document.querySelector('#taskName').addEventListener('change', function(event){
+    if(event.target.value && event.target.value.length >= 8){
+        event.target.classList.remove('is-invalid')
+        event.target.classList.add('is-valid')
+    } else {
+        event.target.classList.remove('is-valid')
+        event.target.classList.add('is-invalid')
+    }
 
+})
+document.querySelector('#taskDate').addEventListener('input', function(event){
+    if(event.target.value){
+        event.target.classList.remove('is-invalid')
+        event.target.classList.add('is-valid')
+    } else {
+        event.target.classList.remove('is-valid')
+        event.target.classList.add('is-invalid')
+    }
+})
+document.querySelector('#taskAssignee').addEventListener('input', function(event){
+    if(event.target.value){
+        event.target.classList.remove('is-invalid')
+        event.target.classList.add('is-valid')
+    } else {
+        event.target.classList.remove('is-valid')
+        event.target.classList.add('is-invalid')
+    }
+})
+document.querySelector('#taskDescription').addEventListener('input', function(event){
+    if(event.target.value && event.target.value.length >= 15){
+        event.target.classList.remove('is-invalid')
+        event.target.classList.add('is-valid')
+    } else {
+        event.target.classList.remove('is-valid')
+        event.target.classList.add('is-invalid')
+    }
+})
