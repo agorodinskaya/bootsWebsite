@@ -1,0 +1,77 @@
+body,
+html {
+    height: 100%;
+    background-color: #fffffe;
+    color: #272343;
+}
+p {
+    padding: 0;
+    margin: 0;
+}
+
+
+
+.scroll-area-sm {
+    height: 50vh;
+    overflow-x: hidden
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+}
+
+.icon:hover {
+    opacity: 60%;
+}
+
+.taskSummary {
+    display: flex;
+    list-style-type: none;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* .done {
+    background-color: #009919
+} */
+
+.done{
+    color: #5cb85c;
+}
+
+/* .review {
+    background-color: #5bc0de
+} */
+
+.review{
+    color: #5bc0de
+}
+
+/* .inProgress {
+    background-color: #ffc400e3
+} */
+
+.inProgress {
+    color: #ffc400e3
+}
+
+/* .toDo {
+    background-color: #d9534f
+} */
+
+.toDo{
+    color: #d9534f
+}
+.custom-checkbox {
+    padding: 0px;
+}
+.task-detail-summary {
+    padding-left: 0.7rem ;
+}
+
+.no-priority{
+    color: #333;
+    background-color: #333;
+}
