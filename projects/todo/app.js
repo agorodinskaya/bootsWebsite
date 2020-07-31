@@ -211,34 +211,49 @@ function eventLength(number){
 
 // dummy tasks:
 storeTask("Wesbos JS", 
-     "01/08/2020","AG",
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "3",
-     "done",1);
+          "01/08/2020","AG",
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+          "3",
+          "done",
+          1);
 
 storeTask("Validation form", 
-        "01/08/2020",
-        "AG", 
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-        "4",
-        "inProgress",
-        2)
+          "01/08/2020",
+          "AG", 
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+          "4",
+          "inProgress",
+          2)
 
 storeTask("Canvas", 
           "01/08/2020", 
-          "AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!", "2", "review", 4)
+          "AG", 
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!", 
+          "2", 
+          "review", 
+          4)
 
-storeTask("Debrief on next steps with Yumi and Zoe", "01/08/2020","AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","2","review",4)
+storeTask("Debrief on next steps with Yumi and Zoe", 
+          "01/08/2020",
+          "AG",
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+          "2",
+          "review",
+          4)
 
-storeTask("Todo - keep working on my version ","01/08/2020","AG","Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","4","inProgress", 5)
+storeTask("Todo - keep working on my version ",
+          "01/08/2020",
+          "AG",
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+          "4",
+          "inProgress",
+           5)
 
-storeTask( "Keep working on my side projects", "01/08/2020","AG","Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","1","inProgress", 6)
+storeTask( "Keep working on my side projects",
+           "01/08/2020",
+           "AG",
+           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+           "1",
+           "inProgress",
+            6)
 
-//returnes TaskList:
-// assignee: "AG"
-// checkedPriority: 3
-// checkedProgress: "review"
-// description: "description:"Lorem ipsum dolor sit amet consectetur adipisicing elit.Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","
-// dueDate: "2020-08-07"
-// id: 2
-// name: "Testing is alalfnl fl"
