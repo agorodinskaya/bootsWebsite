@@ -79,3 +79,11 @@ p {
     background: transparent;
     border: none;
 }
+.alert-danger {
+  color: #721c24;
+  background: #f8d7da;
+}
+.alert-success {
+  color: #155724;
+  background: #d4edda;
+}

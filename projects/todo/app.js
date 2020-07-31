@@ -1,10 +1,5 @@
 window.onload = function () {
 
-// const createButton = document.getElementById('addButton');
-
-// const modal = document.querySelector(".modal-overlay");
-// const closeBtn = document.querySelector(".close-btn");
-
 //declarations: 
 // container and modal:
 const taskContainer = document.querySelector('#tasks');
@@ -12,15 +7,20 @@ const modal = document.querySelector('#newTaskInput');
 const taskModalSaveBtn = document.querySelector('#task-modal-save');
 
 // //form fields:
-
-
+const taskName = document.querySelector('#taskName');
+const taskDescription = document.querySelector('#taskDescription');
+const taskDate = document.querySelector('#taskDate');
+const taskAssignee = document.querySelector('#taskAssignee');
+    // $(function () {
+    //     $('[data-toggle="tooltip"]').tooltip()
+    // })   
 // priorities creating an array of options: 
 const high = document.querySelector('#highPriority');
 const medium = document.querySelector('#mediumPriority');
 const low = document.querySelector('#lowPriority');
 
 let priorities = [high, medium, low];
-let arrayColor = ['text-dark', 'text-info', 'text-warning','text-danger']
+// let arrayColor = ['text-dark', 'text-info', 'text-warning','text-danger']
 let arrayColorSVG = ['#292b2c', '#5bc0de', '#f0ad4e','#d9534f']
 //prgress :
 const done = document.querySelector('#statusDone');
@@ -29,28 +29,64 @@ const inprogress = document.querySelector('#statusInProgress');
 const todo = document.querySelector('#statusToDo');
 let progress = [done, review, inprogress, todo];
 // let arrProgress = ['text-dark', 'text-info', 'text-warning', 'text-danger'] //['#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']
-let id = 0;
+let id = 1;
 
+const openForm = document.querySelector("#openForm");
+    //const openForm = document.querySelector("#newTask");
+openForm.addEventListener("click", function (event) {
+    clearValues();
+    clearValidations();
+});
+function clearValues() {
+    taskName.value = null;
+    taskDescription.value = null;
+    taskAssignee.value = null;
+    taskDate.value = null;
+    for (let i = 0; i < priorities.length; i++) {
+        priorities[i].checked = false
+    }
+    for (let i = 0; i < progress.length; i++) {
+        progress[i].checked = false
+    }
+}
+function clearValidations() {
+    taskName.classList.remove("is-invalid", "is-valid");
+    taskDescription.classList.remove("is-invalid", "is-valid");
+    taskAssignee.classList.remove("is-invalid", "is-valid");
+    taskDate.classList.remove("is-invalid", "is-valid");
+}
 
 //event listeners:
-taskModalSaveBtn.addEventListener('click', saveBtn)
+taskModalSaveBtn.addEventListener('click', saveBtn);
+taskName.addEventListener('input', function(event){
+    displayAlert(eventLength(8))
+})
+taskDescription.addEventListener('input', function(event){
+    displayAlert(eventLength(15))
+})
+taskAssignee.addEventListener('input', function(event){
+    displayAlert(eventExists(event))
+})
+taskDate.addEventListener('submit', function(event){
+    displayAlert(eventExists(event))
+})
 
 //functions:
-function saveBtn(){
-    let name = document.querySelector('#taskName');
-    console.log(name)
-    
-    let description = document.querySelector('#taskDescription');
-    
-    let dueDate = document.querySelector('#taskDate');
-    let assignee = document.querySelector('#taskAssignee');
+function saveBtn(e){
+    e.preventDefault();
+
+    let name = taskName.value;
+    let description = taskDescription.value;
+    let dueDate = taskDate.value;
+    let assignee = taskAssignee.value;
     // console.log({ name, description, dueDate, assignee});
     // console.log(priorities)
+    
     let checkedPriority;
     for (let i = 0; i < priorities.length; i++) {
         if (priorities[i].checked) { 
             checkedPriority = Number(priorities[i].value); 
-            console.log(typeof checkedPriority, checkedPriority);
+            // console.log(typeof checkedPriority, checkedPriority);
     }   
     }
     
@@ -58,12 +94,19 @@ function saveBtn(){
     for (let i = 0; i < progress.length; i++) {
         if (progress[i].checked) {
             checkedProgress = progress[i].value;
-            console.log(typeof checkedProgress, checkedProgress);
+            // console.log(typeof checkedProgress, checkedProgress);
         }
     }
-    // console.log({ name, dueDate, assignee, description, checkedPriority, checkedProgress });
-    addTask(name.value, dueDate.value, assignee.value, description.value, checkedPriority, checkedProgress );
     
+    if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress)) {
+        addTask(name, dueDate, assignee, description, checkedPriority, checkedProgress);
+        $("#newTaskInput").modal("hide");
+    } else {
+        alert("Please complete the form");
+        // $("#newTaskInput").modal("show");
+        // let items = [name, dueDate, assignee, description, checkedPriority, checkedProgress]
+        // displayAlert(eventExists(event))
+    }   
 }
 
 
@@ -123,42 +166,30 @@ const taskElement = document.createRange().createContextualFragment(html);
 taskContainer.append(taskElement)
     
 }
-}
-//// alerts :
-document.querySelector('#taskName').addEventListener('change', function(event){
-    if(event.target.value && event.target.value.length >= 8){
-        event.target.classList.remove('is-invalid')
-        event.target.classList.add('is-valid')
-    } else {
-        event.target.classList.remove('is-valid')
-        event.target.classList.add('is-invalid')
-    }
 
-})
-document.querySelector('#taskDate').addEventListener('input', function(event){
-    if(event.target.value){
+
+//// alerts :
+function displayAlert(bool){
+    if(bool){
         event.target.classList.remove('is-invalid')
         event.target.classList.add('is-valid')
     } else {
         event.target.classList.remove('is-valid')
         event.target.classList.add('is-invalid')
     }
-})
-document.querySelector('#taskAssignee').addEventListener('input', function(event){
-    if(event.target.value){
-        event.target.classList.remove('is-invalid')
-        event.target.classList.add('is-valid')
-    } else {
-        event.target.classList.remove('is-valid')
-        event.target.classList.add('is-invalid')
-    }
-})
-document.querySelector('#taskDescription').addEventListener('input', function(event){
-    if(event.target.value && event.target.value.length >= 15){
-        event.target.classList.remove('is-invalid')
-        event.target.classList.add('is-valid')
-    } else {
-        event.target.classList.remove('is-valid')
-        event.target.classList.add('is-invalid')
-    }
-})
+}
+function checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress) {
+    if (name && name.length > 8 && description && description.length > 15 && assignee && dueDate && checkedPriority && checkedProgress) {
+    return true;
+    } else{return false}
+}
+
+function eventExists(event){
+    return event.target.value;
+
+}
+function eventLength(number){
+    return event.target.value&&event.target.value.length > number;
+}
+
+}
