@@ -36,12 +36,11 @@ let progress = [done, review, inprogress, todo];
 // let arrProgress = ['text-dark', 'text-info', 'text-warning', 'text-danger'] //['#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']
 
 //////////EVENT LISTENERS://///////////////////////////////////////////////////////////////////////
-openForm.addEventListener("click", function (event) {
-    clearValues();
-    clearValidations();
+openForm.addEventListener("click", function () {
+    seToDefault();
 });
 taskModalSaveBtn.addEventListener('click', saveBtn);
-taskName.addEventListener('input', function(event){
+taskName.addEventListener('input', function(){
     displayAlert(eventLength(8))
 })
 taskDescription.addEventListener('input', function(event){
@@ -57,7 +56,7 @@ taskDate.addEventListener('submit', function(event){
 //////////FUNCTIONS://///////////////////////////////////////////////////////////////////////
 
 //set to default when open the modal:
-function clearValues() {
+function seToDefault() {
     taskName.value = null;
     taskDescription.value = null;
     taskAssignee.value = null;
@@ -68,8 +67,6 @@ function clearValues() {
     for (let i = 0; i < progress.length; i++) {
         progress[i].checked = false
     }
-}
-function clearValidations() {
     taskName.classList.remove("is-invalid", "is-valid");
     taskDescription.classList.remove("is-invalid", "is-valid");
     taskAssignee.classList.remove("is-invalid", "is-valid");
@@ -124,7 +121,7 @@ function storeTask(name, dueDate, assignee, description, checkedPriority, checke
 function refreshPage() {
     clearAll();
     taskList.forEach(task => addTask(task));
-    console.log(taskList)
+   
 }
 function clearAll() {
     taskContainer.innerHTML = "";
@@ -215,13 +212,21 @@ function eventLength(number){
 // dummy tasks:
 storeTask("Wesbos JS", 
      "01/08/2020","AG",
-   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
     "3",
      "done",1);
 
-storeTask("Validation form", "01/08/2020","AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","4","inProgress",2)
+storeTask("Validation form", 
+        "01/08/2020",
+        "AG", 
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+        "4",
+        "inProgress",
+        2)
 
-storeTask("Canvas", "01/08/2020", "AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!", "2", "review", 4)
+storeTask("Canvas", 
+          "01/08/2020", 
+          "AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!", "2", "review", 4)
 
 storeTask("Debrief on next steps with Yumi and Zoe", "01/08/2020","AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","2","review",4)
 
