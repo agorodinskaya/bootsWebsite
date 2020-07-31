@@ -25,9 +25,9 @@ let arrayColorSVG = ['#292b2c', '#5bc0de', '#f0ad4e','#d9534f']
 //prgress :
 const done = document.querySelector('#statusDone');
 const review = document.querySelector('#statusReview');
-const inprogress = document.querySelector('#statusInProgress');
+const inProgress = document.querySelector('#statusInProgress');
 const todo = document.querySelector('#statusToDo');
-let progress = [done, review, inprogress, todo];
+let progress = [done, review, inProgress, todo];
 // let arrProgress = ['text-dark', 'text-info', 'text-warning', 'text-danger'] //['#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']
 let id = 1;
 
