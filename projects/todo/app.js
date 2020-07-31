@@ -1,42 +1,62 @@
-window.onload = function () {
 
-//declarations: 
+
+//////////DECLARATIONS://///////////////////////////////////////////////////////////////////////
+ let taskList = [];
+ taskId = 0;  
+const openForm = document.querySelector("#openForm");
+
 // container and modal:
 const taskContainer = document.querySelector('#tasks');
 const modal = document.querySelector('#newTaskInput');
 const taskModalSaveBtn = document.querySelector('#task-modal-save');
 
 // //form fields:
+
 const taskName = document.querySelector('#taskName');
 const taskDescription = document.querySelector('#taskDescription');
 const taskDate = document.querySelector('#taskDate');
 const taskAssignee = document.querySelector('#taskAssignee');
-    // $(function () {
-    //     $('[data-toggle="tooltip"]').tooltip()
-    // })   
+      
 // priorities creating an array of options: 
 const high = document.querySelector('#highPriority');
 const medium = document.querySelector('#mediumPriority');
 const low = document.querySelector('#lowPriority');
-
-let priorities = [high, medium, low];
+const noPriority = document.querySelector('#noPriority');
+// values stored : high = 4; medium = 3; low = 2; noPriority = 1;
+let priorities = [high, medium, low, noPriority];
 // let arrayColor = ['text-dark', 'text-info', 'text-warning','text-danger']
 let arrayColorSVG = ['#292b2c', '#5bc0de', '#f0ad4e','#d9534f']
-//prgress :
+
+//progress :
 const done = document.querySelector('#statusDone');
 const review = document.querySelector('#statusReview');
-const inProgress = document.querySelector('#statusInProgress');
+const inprogress = document.querySelector('#statusInProgress');
 const todo = document.querySelector('#statusToDo');
-let progress = [done, review, inProgress, todo];
+let progress = [done, review, inprogress, todo];
 // let arrProgress = ['text-dark', 'text-info', 'text-warning', 'text-danger'] //['#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']
-let id = 1;
 
-const openForm = document.querySelector("#openForm");
-    //const openForm = document.querySelector("#newTask");
+//////////EVENT LISTENERS://///////////////////////////////////////////////////////////////////////
 openForm.addEventListener("click", function (event) {
     clearValues();
     clearValidations();
 });
+taskModalSaveBtn.addEventListener('click', saveBtn);
+taskName.addEventListener('input', function(event){
+    displayAlert(eventLength(8))
+})
+taskDescription.addEventListener('input', function(event){
+    displayAlert(eventLength(15))
+})
+taskAssignee.addEventListener('input', function(event){
+    displayAlert(eventExists(event))
+})
+taskDate.addEventListener('submit', function(event){
+    displayAlert(eventExists(event))
+})
+
+//////////FUNCTIONS://///////////////////////////////////////////////////////////////////////
+
+//set to default when open the modal:
 function clearValues() {
     taskName.value = null;
     taskDescription.value = null;
@@ -56,25 +76,9 @@ function clearValidations() {
     taskDate.classList.remove("is-invalid", "is-valid");
 }
 
-//event listeners:
-taskModalSaveBtn.addEventListener('click', saveBtn);
-taskName.addEventListener('input', function(event){
-    displayAlert(eventLength(8))
-})
-taskDescription.addEventListener('input', function(event){
-    displayAlert(eventLength(15))
-})
-taskAssignee.addEventListener('input', function(event){
-    displayAlert(eventExists(event))
-})
-taskDate.addEventListener('submit', function(event){
-    displayAlert(eventExists(event))
-})
-
-//functions:
+//fill out modal's fields and hit save:
 function saveBtn(e){
-    e.preventDefault();
-
+    e.preventDefault()
     let name = taskName.value;
     let description = taskDescription.value;
     let dueDate = taskDate.value;
@@ -87,6 +91,7 @@ function saveBtn(e){
         if (priorities[i].checked) { 
             checkedPriority = Number(priorities[i].value); 
             // console.log(typeof checkedPriority, checkedPriority);
+            //returns values 1, 2,3 or 4 (see line 25 for more info)
     }   
     }
     
@@ -95,12 +100,13 @@ function saveBtn(e){
         if (progress[i].checked) {
             checkedProgress = progress[i].value;
             // console.log(typeof checkedProgress, checkedProgress);
+            //returns values done, toDo, inProgress or review;
         }
     }
     
     if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress)) {
-        addTask(name, dueDate, assignee, description, checkedPriority, checkedProgress);
-        $("#newTaskInput").modal("hide");
+        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress);
+        $("#newTaskInput").modal("hide"); // set data-modal ...
     } else {
         alert("Please complete the form");
         // $("#newTaskInput").modal("show");
@@ -109,24 +115,37 @@ function saveBtn(e){
     }   
 }
 
+function storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress) {
+    taskId++;
+    const task = { name, dueDate, assignee, description, checkedPriority, checkedProgress, id: taskId };
+    taskList.push(task);
+    refreshPage()
+}
+function refreshPage() {
+    clearAll();
+    taskList.forEach(task => addTask(task));
+    console.log(taskList)
+}
+function clearAll() {
+    taskContainer.innerHTML = "";
+}
 
-
-function addTask(name, dueDate, assignee, description, checkedPriority, checkedProgress){
-    const html = `<div class="row task" id="task1">
+function addTask(task){
+    const html = `<div class="row task" id="${task.taskId}">
                                 <div class="col-lg-4 col-12 taskName order-2 order-lg-1">
                                     <a href="#task1Description" class="text-secondary icon ml-0 pl-0 small"
                                     data-toggle="collapse" data-target="#task1Description">
-                                        <h6 class="text-left">${name}</h6>
+                                        <h6 class="text-left">${task.name}</h6>
                                     </a>
 
 
 
                                 </div>
                                 <div class="col-lg-2 col-6 order-3 order-lg-2">
-                                    ${dueDate}
+                                    ${task.dueDate}
                                 </div>
                                 <div class="col-lg-2 col-6 order-4 order-lg-3">
-                                    ${assignee}
+                                    ${task.assignee}
                                 </div>
                                 <div class="col-lg-4 order-1 order-lg-4">
                                     <ul class="row taskSummary justify-content-around">
@@ -145,12 +164,12 @@ function addTask(name, dueDate, assignee, description, checkedPriority, checkedP
                                         <li class="col">
                                             <button class="d-inline btn btn-link data-toggle="modal"
                                                 data-target="#"><svg width="15" height="15">
-                                                <circle cx="7" cy="7" r="7" fill=${arrayColorSVG[checkedPriority - 1]} />
+                                                <circle cx="7" cy="7" r="7" fill=${arrayColorSVG[task.checkedPriority - 1]} />
                                             </svg>
                                             </button>
                                         </li>
                                         <li class="col">
-                                            <button class="btn btn-link ${checkedProgress}" data-toggle="modal"
+                                            <button class="btn btn-link ${task.checkedProgress}" data-toggle="modal"
                                                 data-target="#"><i class=" fas fa-tag "></i></button>
                                         </li>
                                         <li class="col">
@@ -168,7 +187,7 @@ taskContainer.append(taskElement)
 }
 
 
-//// alerts :
+//// alerts and check for validation:
 function displayAlert(bool){
     if(bool){
         event.target.classList.remove('is-invalid')
@@ -192,4 +211,29 @@ function eventLength(number){
     return event.target.value&&event.target.value.length > number;
 }
 
-}
+
+// dummy tasks:
+storeTask("Wesbos JS", 
+     "01/08/2020","AG",
+   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
+    "3",
+     "done",1);
+
+storeTask("Validation form", "01/08/2020","AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","4","inProgress",2)
+
+storeTask("Canvas", "01/08/2020", "AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!", "2", "review", 4)
+
+storeTask("Debrief on next steps with Yumi and Zoe", "01/08/2020","AG", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","2","review",4)
+
+storeTask("Todo - keep working on my version ","01/08/2020","AG","Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","4","inProgress", 5)
+
+storeTask( "Keep working on my side projects", "01/08/2020","AG","Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","1","inProgress", 6)
+
+//returnes TaskList:
+// assignee: "AG"
+// checkedPriority: 3
+// checkedProgress: "review"
+// description: "description:"Lorem ipsum dolor sit amet consectetur adipisicing elit.Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!","
+// dueDate: "2020-08-07"
+// id: 2
+// name: "Testing is alalfnl fl"
