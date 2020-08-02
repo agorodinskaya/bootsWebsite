@@ -86,11 +86,11 @@
                 </div>
                 <div class="col-md-12">
                     <!-- Alert -->
-                    <div class="alert alert-info alert-dismissable show fade" role="alert">
+                    <div class="alert alert-dismissable show fade" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <strong>Well done!</strong> You are almost there
+                        <strong></strong>
                     </div>
                 </div>
             </div>
@@ -109,17 +109,11 @@
         </form>
         <!--Task List-->
 
-        <div class="scroll-area-sm">
-            <perfect-scrollbar class="ps-show-limits">
-                <div style="position: static;" class="ps ps--active-y">
-                    <div class="ps-content">
-                        <div id="tasks" class="container">
-                            <!--First Task-->
-                            
-                            
         
-        </perfect-scrollbar>
-        </div>
+            <div id="tasks" class="container">
+                            <!--Tasks go here-->
+                <ul></ul>
+             </div>
 
 
         <!--task list end -->
@@ -127,7 +121,7 @@
     <!--footer clear checked trash-->
     <footer class="container">
         <form class="clearAll" action="" method="post">
-            <button type="button" class="ml-0 pl-0 btn btn-link text-dark">Clear All
+            <button id="clearAll" type="button" class="ml-0 pl-0 btn btn-link text-dark">Clear All
                 <i class="icon far fa-trash-alt"></i></button>
         </form>
     </footer>
@@ -145,14 +139,19 @@
                 <form class="needs-validation" novalidate>
                     
                         <div class="form-group">
+                             <div class="alertModal" role="alert">
+                            <span></span>
+                            </div>
                             <label for="taskName">Title</label>
+                           
                             <input class="form-control" type="text" id="taskName" name="taskName"  required>
                             <div class="valid-feedback">success</div>
                             <div class="invalid-feedback">the field can't be empty</div>
-                            <small class="form-text text-info">
+                            <small class="smallText form-text text-info">
                                     Should be longer than 8 characters
                             </small>
                         </div>
+                       
                         <div class="row">
                             <div class="form-group col-lg-6 form-row">
                                 <label class="col-4 col-form-label" for="taskDate">Due Date:</label>
@@ -161,7 +160,7 @@
                                     <div class="valid-feedback">success</div>
                                     <div class="invalid-feedback">the field can't be empty</div>
                                     
-                                <small class="form-text text-info">
+                                <small class="smallText form-text text-info">
                                     Please choose the date or type (DD/MM/YYYY)
                                 </small>
                             </div>
@@ -177,10 +176,13 @@
                             <textarea class="form-control" id="taskDescription">Editable Text</textarea>
                             <div class="valid-feedback">success</div>
                             <div class="invalid-feedback">Please enter the description</div>
-                            <small class="form-text text-info">
+                            <small class="smallText form-text text-info">
                                     Should be longer than 15 characters
                             </small>
                         </div>
+                        <small class="smallText form-text text-info">
+                                   Please set priority and status:
+                        </small>
                         <p class="text-center"><button
                                 class="btn btn-outline-primary btn-lg border-0 font-weight-bold shadow"
                                 data-toggle="collapse" href="#selectPriority" type="button">!!! Priority</button>
@@ -188,6 +190,7 @@
                                 data-toggle="collapse" href="#selectStatus" type="button"><i
                                     class="icon fas fa-tag"></i>Status</button></p>
                         <!-- select priority -->
+                        
                         <div class="collapse" id="selectPriority">
                             <div class="card card-body">
                                 <p>
@@ -258,7 +261,7 @@
                         </div>
                         <!-- select Status end-->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary shadow" >Close</button>
+                            <button type="button" class="btn btn-secondary shadow" data-dismiss="modal">Close</button>
                             <button id="task-modal-save" type="submit" class="btn btn-primary shadow" >Save</button>
                         </div>
                     </div>
