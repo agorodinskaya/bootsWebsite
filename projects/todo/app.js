@@ -202,8 +202,8 @@ function addTask(task) {
     
     const taskFragment = document.createRange().createContextualFragment(taskToAdd);
     
-    console.log(taskFragment)
-    console.log(taskFragment.querySelector('div.row.task'))
+    // console.log(taskFragment)
+    // console.log(taskFragment.querySelector('div.row.task'))
     const deleteBtn = taskFragment.querySelector('button.deleteItem');
     const editBtn = taskFragment.querySelector('a.editItem');
     // console.log(deleteBtn);
