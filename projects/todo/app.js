@@ -223,9 +223,10 @@ function deleteItem(e) {
     const elId = Number(element.id)
     // console.log(elId)
     taskContainer.removeChild(element);
-    let index = elId -1
+    let index = taskList.findIndex(item => item.id === elId);
+    // console.log(index)
     taskList.splice(index,1);
-    // console.log(taskList);
+    console.log(taskList);
     alertSetup("Item removed successfully from the list", "alert-success");    
 }
 
