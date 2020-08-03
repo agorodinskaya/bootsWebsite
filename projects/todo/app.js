@@ -143,37 +143,14 @@ function saveBtn(e) {
         }, 1000);
         
     } else if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, taskId) && editFlag){
-        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, (taskId));
-        taskContainer.replaceChild(taskContainer.lastElementChild, taskContainer.children[Number(taskContainer.lastElementChild.id) - 1]);
-        
-        
-        
+        updateTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, (taskId));  
         alertModalSetup("Item successfully updated", "alert-success");
 
-        // // handle array :
-        // console.log(taskList)
-        // let index = taskList.findIndex(item => item.id === (taskId + 1));
-        // console.log(index);
-
-        // let lastIndex = taskList.length - 1;
-        // console.log(lastIndex)
-
-        // function move(input, from, to) {
-        //     let numberOfDeletedElm = 1;
-
-        //     const elm = input.splice(from, numberOfDeletedElm)[0];
-
-        //     numberOfDeletedElm = 0;
-
-        //     input.splice(to, numberOfDeletedElm, elm);
-        // }
-        // let taskListUpdate = move(taskList, lastIndex, index);
-        // console.log(taskListUpdate)
         setTimeout(function () {
             $("#newTaskInput").modal("hide"); // set data-modal ...
         }, 1000);
         setBackToDefault();
-        taskContainer.removeChild(taskContainer.children[Number(taskContainer.lastElementChild.id - 1)])
+        
     } else {
         alertModalSetup("Please complete the form", "alert-danger");
         console.log(alertModal)
@@ -201,7 +178,16 @@ function refreshPage() {
 function clearAll() {
     taskContainer.innerHTML = "";
 }
-
+function updateTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, id){
+        const updateTask = { name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, id: taskId };
+        let index = taskList.findIndex(item => item.id === (taskId + 1));
+       
+        let lastIndex = taskList.length - 1;
+       
+        taskList.splice(index, 1, updateTask);
+        console.log(taskList);
+        refreshPage();
+}
 
 
 function addTask(task) {
