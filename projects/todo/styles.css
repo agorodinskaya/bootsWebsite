@@ -87,3 +87,9 @@ p {
   color: #155724;
   background: #d4edda;
 }
+.visible {
+  visibility: visible;
+}
+.invisible {
+  visibility: hidden;
+}

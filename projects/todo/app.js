@@ -2,6 +2,7 @@
 
 //////////DECLARATIONS://///////////////////////////////////////////////////////////////////////
 let taskList = [];
+let editFlag = false;
 
 taskId = 0;
 const openForm = document.querySelector("#openForm");
@@ -28,7 +29,7 @@ const medium = document.querySelector('#mediumPriority');
 const low = document.querySelector('#lowPriority');
 const noPriority = document.querySelector('#noPriority');
 // values stored : high = 4; medium = 3; low = 2; noPriority = 1;
-let priorities = [high, medium, low, noPriority];
+let priorities = [noPriority, low, medium, high  ];
 // let arrayColor = ['text-dark', 'text-info', 'text-warning','text-danger']
 let arrayColorSVG = ['#292b2c', '#5bc0de', '#f0ad4e', '#d9534f']
 
@@ -38,11 +39,14 @@ const review = document.querySelector('#statusReview');
 const inprogress = document.querySelector('#statusInProgress');
 const todo = document.querySelector('#statusToDo');
 let progress = [done, review, inprogress, todo];
+
 // let arrProgress = ['text-dark', 'text-info', 'text-warning', 'text-danger'] //['#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']
+
+
 
 //////////EVENT LISTENERS://///////////////////////////////////////////////////////////////////////
 openForm.addEventListener("click", function () {
-    seToDefault();
+    setBackToDefault();
 });
 taskModalSaveBtn.addEventListener('click', saveBtn);
 taskName.addEventListener('input', function () {
@@ -58,16 +62,18 @@ taskDate.addEventListener('submit', function (event) {
     displayAlert(eventExists(event))
 })
 clearAllBtn.addEventListener('click', function () {
-   clearAll();
+    clearAll();
     taskList = [];
-    alertSetup("Successfully removed items from the list", "alert-success");    
+    taskId =0;
+    alertSetup("Successfully removed items from the list", "alert-success");
 });
 
 
 //////////FUNCTIONS://///////////////////////////////////////////////////////////////////////
 
 //set to default when open the modal:
-function seToDefault() {
+function setBackToDefault() {
+    editFlag = false;
     taskName.value = null;
     taskDescription.value = null;
     taskAssignee.value = null;
@@ -84,15 +90,15 @@ function seToDefault() {
     taskDate.classList.remove("is-invalid", "is-valid");
 }
 
+
 //fill out modal's fields and hit save:
 function saveBtn(e) {
     e.preventDefault()
+    //declare varialbles for functions below :
     let name = taskName.value;
     let description = taskDescription.value;
     let dueDate = taskDate.value;
     let assignee = taskAssignee.value;
-    // console.log({ name, description, dueDate, assignee});
-    // console.log(priorities)
 
     let checkedPriority;
     for (let i = 0; i < priorities.length; i++) {
@@ -111,22 +117,30 @@ function saveBtn(e) {
             //returns values done, toDo, inProgress or review;
         }
     }
-
-    if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress)) {
+    if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress) && !editFlag) {
 
         storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress);
         alertModalSetup("Successfully updated", "alert-success");
         setTimeout(function () {
             $("#newTaskInput").modal("hide"); // set data-modal ...
         }, 1000);
-       
+        
+    } else if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress, taskId) && editFlag){
+        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, (taskId));
+        taskContainer.replaceChild(taskContainer.lastElementChild, taskContainer.children[Number(taskContainer.lastElementChild.id) - 1]);
+        alertModalSetup("Item successfully updated", "alert-success");
+        
+        setTimeout(function () {
+            $("#newTaskInput").modal("hide"); // set data-modal ...
+        }, 1000);
+        setBackToDefault();
     } else {
         alertModalSetup("Please complete the form", "alert-danger");
         console.log(alertModal)
-        smallText = document.querySelectorAll('.smallText'); 
-        smallText.forEach(small => small.classList.add('text-danger'));   
+        smallText = document.querySelectorAll('.smallText');
+        smallText.forEach(small => small.classList.add('text-danger'));
         setTimeout(function () {
-            smallText.forEach(small => small.classList.remove('text-danger'));   
+            smallText.forEach(small => small.classList.remove('text-danger'));
         }, 1500);
     }
 }
@@ -135,13 +149,14 @@ function storeTask(name, dueDate, assignee, description, checkedPriority, checke
     taskId++;
     const task = { name, dueDate, assignee, description, checkedPriority, checkedProgress, id: taskId };
     taskList.push(task);
-    refreshPage()
     
+    refreshPage()
+
 }
 function refreshPage() {
     clearAll();
     taskList.forEach(task => addTask(task));
-    
+
 }
 function clearAll() {
     taskContainer.innerHTML = "";
@@ -169,12 +184,6 @@ function addTask(task) {
                                 <div class="col-lg-4 order-1 order-lg-4">
                                     <ul class="row taskSummary justify-content-around">
                                         <li class="col">
-
-                                            <i class="far fa-check-circle">
-                                                0/3</i>
-
-                                        </li>
-                                        <li class="col">
                                             <a href="#newTaskInput" role=button id="editItem"
                                                 class="d-inline btn btn-link col-2 ml-0 pl-0 mb-0 pb-0 text-dark editItem"
                                                 data-toggle="modal" data-target="#newTaskInput">
@@ -199,38 +208,100 @@ function addTask(task) {
                                 </div>
                             </div>
 `
-    
+
     const taskFragment = document.createRange().createContextualFragment(taskToAdd);
-    
+
     // console.log(taskFragment)
     // console.log(taskFragment.querySelector('div.row.task'))
     const deleteBtn = taskFragment.querySelector('button.deleteItem');
-    const editBtn = taskFragment.querySelector('a.editItem');
-    // console.log(deleteBtn);
-    deleteBtn.addEventListener('click', deleteItem)
-    editBtn.addEventListener('click', function () { console.log('edit') });
-    // console.log(taskToAdd);
-
-    taskContainer.appendChild(taskFragment);   
+    const editBtn = taskFragment.querySelector('a.editItem');  
     
+    deleteBtn.addEventListener('click', deleteItem);
+    
+    editBtn.addEventListener('click', editItem);
+    setBackToDefault;
+    taskContainer.appendChild(taskFragment);
 }
 
 
 function deleteItem(e) {
-    
+
     const element = e.currentTarget.parentElement.parentElement.parentElement.parentElement;
     // console.log(element)
     const elId = Number(element.id)
     // console.log(elId)
     taskContainer.removeChild(element);
+    // handle array :
     let index = taskList.findIndex(item => item.id === elId);
     // console.log(index)
-    taskList.splice(index,1);
+    taskList.splice(index, 1);
     console.log(taskList);
-    alertSetup("Item removed successfully from the list", "alert-success");    
+    alertSetup("Item removed successfully from the list", "alert-success");
+}
+function editItem(e) {
+    
+    const element = e.currentTarget.parentElement.parentElement.parentElement.parentElement;
+    const elId = Number(element.id) - 1
+    console.log(elId)
+    editFlag = true;
+    // get elements from html:
+    let nameToEdit = element.children[0].children[0].children[0].innerText;
+    let assinedToEdit = element.children[2].innerText;
+
+    //priorities: 
+    let prioritiesString = element.children[3].children[0].children[1].children[0].children[0].children[0] 
+    // JQUERY to rewrite in JS:
+    let prioritiesObject = $(prioritiesString);   
+    let prioritieToEdit = priorities[arrayColorSVG.indexOf(prioritiesObject[0].attributes.fill.value)]; 
+    //status:
+    let statusString = element.children[3].children[0].children[2].innerHTML;
+    // JQUERY to rewrite in JS:
+    let statusObject = $(statusString); 
+    let progressToEdit = statusObject[0].classList.value.split(' ')[2];
+    
+    // show editable items in modal:  
+    taskId = elId;
+    taskName.value = nameToEdit;
+    taskAssignee.value = assinedToEdit;
+    // taskDate.value = dateToEdit; 
+    //check priority :
+    for (let i = 0; i < priorities.length; i++) {
+        if (Number(prioritieToEdit.value) === Number(priorities[i].value)) {
+            priorities[i].checked = true
+        }
+    }   
+    // check status:
+    for (let i = 0; i < progress.length; i++) {
+        if (progress[i].value === progressToEdit) {
+            progress[i].checked = true
+        }
+    }
+    
+    taskModalSaveBtn.textContent = "Edit";
+    taskModalSaveBtn.classList.add('btn-danger');
+    // handle array :
+    
+    let index = taskList.findIndex(item => item.id === (elId + 1));
+    let lastIndex = taskList.length;
+    function move(array, from, to) {
+        if (to === from) return array;
+
+        var target = array[from];
+        var increment = to < from ? -1 : 1;
+
+        for (var k = from; k != to; k += increment) {
+            array[k] = array[k + increment];
+        }
+        array[to] = target;
+        return array;
+    }
+    let taskListUpdate = move(taskList, lastIndex, index);
+    console.log(taskListUpdate)
+    
 }
 
-//// alerts and check for validation:
+
+//// Alerts and check for validation://////////////////////////////
 
 function alertModalSetup(text, action) {
     alertModal.textContent = text;
@@ -279,7 +350,7 @@ function eventLength(number) {
 storeTask("Wesbos JS",
     "01/08/2020", "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "3",
+    "4",
     "done",
     1);
 
@@ -287,7 +358,7 @@ storeTask("Validation form",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "4",
+    "2",
     "inProgress",
     2)
 
@@ -311,7 +382,7 @@ storeTask("Todo - keep working on my version ",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "4",
+    "2",
     "inProgress",
     5)
 
