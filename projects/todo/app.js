@@ -74,6 +74,9 @@ clearAllBtn.addEventListener('click', function () {
 //set to default when open the modal:
 function setBackToDefault() {
     editFlag = false;
+    taskModalSaveBtn.textContent = "Save";
+    taskModalSaveBtn.classList.remove('btn-danger');
+    taskModalSaveBtn.classList.add('btn-primary');
     taskName.value = null;
     taskDescription.value = null;
     taskAssignee.value = null;
