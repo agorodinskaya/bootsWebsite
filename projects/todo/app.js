@@ -281,22 +281,22 @@ function editItem(e) {
     taskModalSaveBtn.classList.add('btn-danger');
     // handle array :
     
-    let index = taskList.findIndex(item => item.id === (elId + 1));
-    let lastIndex = taskList.length;
-    function move(array, from, to) {
-        if (to === from) return array;
+    // let index = taskList.findIndex(item => item.id === (elId + 1));
+    // let lastIndex = taskList.length;
+    // function move(array, from, to) {
+    //     if (to === from) return array;
 
-        var target = array[from];
-        var increment = to < from ? -1 : 1;
+    //     var target = array[from];
+    //     var increment = to < from ? -1 : 1;
 
-        for (var k = from; k != to; k += increment) {
-            array[k] = array[k + increment];
-        }
-        array[to] = target;
-        return array;
-    }
-    let taskListUpdate = move(taskList, lastIndex, index);
-    console.log(taskListUpdate)
+    //     for (var k = from; k != to; k += increment) {
+    //         array[k] = array[k + increment];
+    //     }
+    //     array[to] = target;
+    //     return array;
+    // }
+    // let taskListUpdate = move(taskList, lastIndex, index);
+    // console.log(taskListUpdate)
     
 }
 
