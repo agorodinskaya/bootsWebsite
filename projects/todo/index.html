@@ -132,7 +132,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Task Detail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span id="X" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -188,7 +188,10 @@
                                 data-toggle="collapse" href="#selectPriority" type="button">!!! Priority</button>
                             <button class="btn btn-outline-primary btn-lg border-0 font-weight-bold shadow"
                                 data-toggle="collapse" href="#selectStatus" type="button"><i
-                                    class="icon fas fa-tag"></i>Status</button></p>
+                                    class="icon fas fa-tag"></i>Status</button>
+                            <button class="btn btn-outline-primary btn-lg border-0 font-weight-bold shadow"
+                                data-toggle="collapse" href="#selectTag" type="button"><i
+                                    class="icon fas fa-tag"></i>Tag</button></p>
                         <!-- select priority -->
                         
                         <div class="collapse" id="selectPriority">
@@ -198,28 +201,28 @@
                                 </p>
                                 <div id="taskPriority" class="custom-control custom-radio">
                                     <input type="radio" id="highPriority" name="priority" class="custom-control-input"
-                                        value="4">
-                                    <label class="custom-control-label font-weight-bold text-danger"
+                                        value="high">
+                                    <label class="custom-control-label font-weight-bold high"
                                         for="highPriority">!!!
                                         High Priority</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="mediumPriority" name="priority" class="custom-control-input"
-                                        value="3">
-                                    <label class="custom-control-label font-weight-bold text-warning"
+                                        value="medium">
+                                    <label class="custom-control-label font-weight-bold medium"
                                         for="mediumPriority">!! Medium Priority</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="lowPriority" name="priority" class="custom-control-input"
-                                        value="2">
-                                    <label class="custom-control-label font-weight-bold text-info" for="lowPriority">!
+                                        value="low">
+                                    <label class="custom-control-label font-weight-bold low" for="lowPriority">!
                                         Low
                                         Priority</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="noPriority" name="priority" class="custom-control-input"
-                                        value="1">
-                                    <label class="custom-control-label font-weight-bold text-dark" for="noPriority">
+                                        value="nopriority">
+                                    <label class="custom-control-label font-weight-bold nopriority" for="noPriority">
                                         No
                                         Priority</label>
                                 </div>
@@ -236,33 +239,64 @@
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="statusDone" name="status" class="custom-control-input"
                                         value="done">
-                                    <label class="custom-control-label font-weight-bold text-success"
-                                        for="statusDone"><i class="icon fas fa-tag"></i> Done</label>
+                                    <label class="custom-control-label font-weight-bold done"
+                                        for="statusDone"><i class="icon fas fa-tasks"></i> Done</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="statusReview" name="status" class="custom-control-input"
                                         value="review">
-                                    <label class="custom-control-label font-weight-bold text-info" for="statusReview"><i
-                                            class="icon fas fa-tag"></i> Review</label>
+                                    <label class="custom-control-label font-weight-bold review" for="statusReview"><i
+                                            class="icon fas fa-tasks"></i> Review</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="statusInProgress" name="status" class="custom-control-input"
                                         value="inProgress">
-                                    <label class="custom-control-label font-weight-bold text-warning"
-                                        for="statusInProgress"><i class="icon fas fa-tag"></i> In Progress</label>
+                                    <label class="custom-control-label font-weight-bold inProgress"
+                                        for="statusInProgress"><i class="icon fas fa-tasks"></i> In Progress</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="statusToDo" name="status" class="custom-control-input"
                                         value="toDo">
-                                    <label class="custom-control-label font-weight-bold text-danger" for="statusToDo">
-                                        <i class="icon fas fa-tag"></i> To Do</label>
+                                    <label class="custom-control-label font-weight-bold toDo" for="statusToDo">
+                                        <i class="icon fas fa-tasks"></i> To Do</label>
                                 </div>
                             </div>
                         </div>
                         <!-- select Status end-->
+                        <div class="collapse" id="selectTag">
+                            <div class="card card-body">
+                                <p>
+                                    Tag your task
+                                </p>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="tagPersonal" name="tagName" class="custom-control-input"
+                                        value="personal">
+                                    <label class="custom-control-label font-weight-bold personal"
+                                        for="tagPersonal"><i class="icon fas fa-tag"></i> personal</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="tagWork" name="tagName" class="custom-control-input"
+                                        value="work">
+                                    <label class="custom-control-label font-weight-bold work" for="tagWork"><i
+                                            class="icon fas fa-tag"></i> work</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="tagFamily" name="tagName" class="custom-control-input"
+                                        value="family">
+                                    <label class="custom-control-label font-weight-bold family"
+                                        for="tagFamily"><i class="icon fas fa-tag"></i> family</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="tagStudy" name="tagName" class="custom-control-input"
+                                        value="study">
+                                    <label class="custom-control-label font-weight-bold study" for="tagStudy">
+                                        <i class="icon fas fa-tag"></i> study</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary shadow" data-dismiss="modal">Close</button>
-                            <button id="task-modal-save" type="submit" class="btn btn-primary shadow visible" >Save</button>
+                            <button type="button" id="btnModalClose" class="btn btn-secondary shadow" data-dismiss="modal">Close</button>
+                            <button id="task-modal-save" type="submit" class="btn shadow visible" >Save</button>
                         </div>
                     </div>
                 </div>

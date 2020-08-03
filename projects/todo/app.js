@@ -14,7 +14,8 @@ const taskModalSaveBtn = document.querySelector('#task-modal-save');
 const clearAllBtn = document.querySelector('#clearAll');
 const alert = document.querySelector(".alert")
 const alertModal = document.querySelector(".alertModal");
-
+const closeModalBtn = document.querySelector("#btnModalClose")
+const crossModalBtn = document.querySelector('#X')
 // const 
 // //form fields:
 
@@ -27,11 +28,8 @@ const taskAssignee = document.querySelector('#taskAssignee');
 const high = document.querySelector('#highPriority');
 const medium = document.querySelector('#mediumPriority');
 const low = document.querySelector('#lowPriority');
-const noPriority = document.querySelector('#noPriority');
-// values stored : high = 4; medium = 3; low = 2; noPriority = 1;
-let priorities = [noPriority, low, medium, high  ];
-// let arrayColor = ['text-dark', 'text-info', 'text-warning','text-danger']
-let arrayColorSVG = ['#292b2c', '#5bc0de', '#f0ad4e', '#d9534f']
+const nopriority = document.querySelector('#noPriority');
+let priorities = [high, medium, low, nopriority];
 
 //progress :
 const done = document.querySelector('#statusDone');
@@ -39,6 +37,13 @@ const review = document.querySelector('#statusReview');
 const inprogress = document.querySelector('#statusInProgress');
 const todo = document.querySelector('#statusToDo');
 let progress = [done, review, inprogress, todo];
+
+// tags :
+const personal = document.querySelector('#tagPersonal');
+const work = document.querySelector('#tagWork');
+const family = document.querySelector('#tagFamily');
+const study = document.querySelector('#tagStudy');
+let tags = [personal, work, family, study];
 
 // let arrProgress = ['text-dark', 'text-info', 'text-warning', 'text-danger'] //['#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']
 
@@ -67,7 +72,8 @@ clearAllBtn.addEventListener('click', function () {
     taskId =0;
     alertSetup("Successfully removed items from the list", "alert-success");
 });
-
+closeModalBtn.addEventListener('click', setBackToDefault)
+crossModalBtn.addEventListener('click', setBackToDefault)
 
 //////////FUNCTIONS://///////////////////////////////////////////////////////////////////////
 
@@ -106,9 +112,9 @@ function saveBtn(e) {
     let checkedPriority;
     for (let i = 0; i < priorities.length; i++) {
         if (priorities[i].checked) {
-            checkedPriority = Number(priorities[i].value);
-            // console.log(typeof checkedPriority, checkedPriority);
-            //returns values 1, 2,3 or 4 (see line 25 for more info)
+            checkedPriority = priorities[i].value;
+            console.log(typeof checkedPriority, checkedPriority);
+            
         }
     }
 
@@ -120,23 +126,54 @@ function saveBtn(e) {
             //returns values done, toDo, inProgress or review;
         }
     }
-    if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress) && !editFlag) {
+    let checkedTag;
+    for (let i = 0; i < tags.length; i++) {
+        if (tags[i].checked) {
+            checkedTag = tags[i].value;
+            console.log(checkedTag);
+            //returns values done, toDo, inProgress or review;
+        }
+    }
+    if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag) && !editFlag) {
 
-        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress);
+        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag);
         alertModalSetup("Successfully updated", "alert-success");
         setTimeout(function () {
             $("#newTaskInput").modal("hide"); // set data-modal ...
         }, 1000);
         
-    } else if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress, taskId) && editFlag){
-        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, (taskId));
+    } else if (checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, taskId) && editFlag){
+        storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, (taskId));
         taskContainer.replaceChild(taskContainer.lastElementChild, taskContainer.children[Number(taskContainer.lastElementChild.id) - 1]);
-        alertModalSetup("Item successfully updated", "alert-success");
         
+        
+        
+        alertModalSetup("Item successfully updated", "alert-success");
+
+        // // handle array :
+        // console.log(taskList)
+        // let index = taskList.findIndex(item => item.id === (taskId + 1));
+        // console.log(index);
+
+        // let lastIndex = taskList.length - 1;
+        // console.log(lastIndex)
+
+        // function move(input, from, to) {
+        //     let numberOfDeletedElm = 1;
+
+        //     const elm = input.splice(from, numberOfDeletedElm)[0];
+
+        //     numberOfDeletedElm = 0;
+
+        //     input.splice(to, numberOfDeletedElm, elm);
+        // }
+        // let taskListUpdate = move(taskList, lastIndex, index);
+        // console.log(taskListUpdate)
         setTimeout(function () {
             $("#newTaskInput").modal("hide"); // set data-modal ...
         }, 1000);
         setBackToDefault();
+        taskContainer.removeChild(taskContainer.children[Number(taskContainer.lastElementChild.id - 1)])
     } else {
         alertModalSetup("Please complete the form", "alert-danger");
         console.log(alertModal)
@@ -148,9 +185,9 @@ function saveBtn(e) {
     }
 }
 
-function storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, id) {
+function storeTask(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag,id) {
     taskId++;
-    const task = { name, dueDate, assignee, description, checkedPriority, checkedProgress, id: taskId };
+    const task = { name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag, id: taskId };
     taskList.push(task);
     
     refreshPage()
@@ -193,14 +230,15 @@ function addTask(task) {
                                                 <i class="fas fa-edit"></i></a>
                                         </li>
                                         <li class="col">
-                                            <button class="d-inline btn btn-link data-toggle="modal"
-                                                data-target="#"><svg width="15" height="15">
-                                                <circle cx="7" cy="7" r="7" fill=${arrayColorSVG[task.checkedPriority - 1]} />
-                                            </svg>
-                                            </button>
+                                            <button class="btn btn-link ${task.checkedPriority}" data-toggle="modal"
+                                                data-target="#"><i class=" fas fa-circle "></i></button>
                                         </li>
                                         <li class="col">
                                             <button class="btn btn-link ${task.checkedProgress}" data-toggle="modal"
+                                                data-target="#"><i class=" fas fa-tasks "></i></button>
+                                        </li>
+                                        <li class="col">
+                                            <button class="btn btn-link ${task.checkedTag}" data-toggle="modal"
                                                 data-target="#"><i class=" fas fa-tag "></i></button>
                                         </li>
                                         <li class="col">
@@ -242,9 +280,10 @@ function deleteItem(e) {
     alertSetup("Item removed successfully from the list", "alert-success");
 }
 function editItem(e) {
-    
+    e.preventDefault()
     const element = e.currentTarget.parentElement.parentElement.parentElement.parentElement;
     const elId = Number(element.id) - 1
+    console.log(element.children)
     console.log(elId)
     editFlag = true;
     // get elements from html:
@@ -252,54 +291,55 @@ function editItem(e) {
     let assinedToEdit = element.children[2].innerText;
 
     //priorities: 
-    let prioritiesString = element.children[3].children[0].children[1].children[0].children[0].children[0] 
+    let prioritiesString = element.children[3].children[0].children[1].innerHTML
     // JQUERY to rewrite in JS:
-    let prioritiesObject = $(prioritiesString);   
-    let prioritieToEdit = priorities[arrayColorSVG.indexOf(prioritiesObject[0].attributes.fill.value)]; 
+    let prioritiesObject = $(prioritiesString);
+    let prioritiesToEdit = prioritiesObject[0].classList.value.split(' ')[2];
+    // console.log(prioritiesToEdit)
+    
     //status:
     let statusString = element.children[3].children[0].children[2].innerHTML;
     // JQUERY to rewrite in JS:
-    let statusObject = $(statusString); 
+    let statusObject = $(statusString);
     let progressToEdit = statusObject[0].classList.value.split(' ')[2];
     
+    //tags:
+    let tagString = element.children[3].children[0].children[3].innerHTML;
+    // JQUERY to rewrite in JS:
+    let tagObject = $(tagString);
+    let tagToEdit = tagObject[0].classList.value.split(' ')[2];
+
+    // console.log(tagToEdit)
+
+
     // show editable items in modal:  
     taskId = elId;
+    console.log(elId)
     taskName.value = nameToEdit;
     taskAssignee.value = assinedToEdit;
     // taskDate.value = dateToEdit; 
     //check priority :
     for (let i = 0; i < priorities.length; i++) {
-        if (Number(prioritieToEdit.value) === Number(priorities[i].value)) {
+        if (priorities[i].value === prioritiesToEdit ) {
             priorities[i].checked = true
         }
-    }   
+    }
+    
     // check status:
     for (let i = 0; i < progress.length; i++) {
         if (progress[i].value === progressToEdit) {
             progress[i].checked = true
         }
     }
+    for (let i = 0; i < tags.length; i++) {
+        if (tags[i].value === tagToEdit) {
+            tags[i].checked = true
+        }
+    }
     
     taskModalSaveBtn.textContent = "Edit";
     taskModalSaveBtn.classList.add('btn-danger');
-    // handle array :
     
-    // let index = taskList.findIndex(item => item.id === (elId + 1));
-    // let lastIndex = taskList.length;
-    // function move(array, from, to) {
-    //     if (to === from) return array;
-
-    //     var target = array[from];
-    //     var increment = to < from ? -1 : 1;
-
-    //     for (var k = from; k != to; k += increment) {
-    //         array[k] = array[k + increment];
-    //     }
-    //     array[to] = target;
-    //     return array;
-    // }
-    // let taskListUpdate = move(taskList, lastIndex, index);
-    // console.log(taskListUpdate)
     
 }
 
@@ -334,8 +374,8 @@ function displayAlert(bool) {
         event.target.classList.add('is-invalid')
     }
 }
-function checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress) {
-    if (name && name.length > 8 && description && description.length > 15 && assignee && dueDate && checkedPriority && checkedProgress) {
+function checkItems(name, dueDate, assignee, description, checkedPriority, checkedProgress, checkedTag) {
+    if (name && name.length > 8 && description && description.length > 15 && assignee && dueDate && checkedPriority && checkedProgress && checkedTag) {
         return true;
     } else { return false }
 }
@@ -353,47 +393,53 @@ function eventLength(number) {
 storeTask("Wesbos JS",
     "01/08/2020", "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "4",
+    "high",
     "done",
+    "personal",
     1);
 
 storeTask("Validation form",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "2",
+    "medium",
     "inProgress",
-    2)
+    "family",
+    2);
 
 storeTask("Canvas",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "2",
+    "high",
     "review",
-    4)
+    "study",
+    4);
 
 storeTask("Debrief on next steps with Yumi and Zoe",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "2",
+    "low",
     "review",
-    4)
+    "study",
+    4);
 
 storeTask("Todo - keep working on my version ",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "2",
+    "medium",
     "inProgress",
-    5)
+    "work",
+    5);
 
 storeTask("Keep working on my side projects",
     "01/08/2020",
     "AG",
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quisquam consequatur commodi non vitae harum autem quibusdam quam ratione deserunt!",
-    "1",
+    "nopriority",
     "inProgress",
+    "work",
     6)
 

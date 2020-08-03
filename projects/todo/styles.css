@@ -64,6 +64,52 @@ p {
 .toDo{
     color: #d9534f
 }
+
+
+
+
+
+
+.personal{
+    color: #f909c5;
+}
+
+/* .review {
+    background-color: #5bc0de
+} */
+
+.work{
+    color: #5610a5f8;
+}
+
+/* .inProgress {
+    background-color: #ffc400e3
+} */
+
+.family {
+    color: #0725aae3;
+}
+
+/* .toDo {
+    background-color: #d9534f
+} */
+
+.study{
+    color: #3ee8a1;
+}
+
+.high {
+    color: #ec0808;
+}
+.medium{
+    color: #f8a20c;
+}
+.low{
+    color: #4387ee;
+}
+.nopriority{
+    color: #333;
+}
 .custom-checkbox {
     padding: 0px;
 }
